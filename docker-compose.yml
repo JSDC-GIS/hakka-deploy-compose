@@ -9,7 +9,7 @@ volumes:
 
 services:
   hakka-client:
-    image: jsdc2021/hakka-client-next:b0.20240819.101
+    image: jsdc2021/hakka-client-next:b0.20240826.114
     container_name: hakka-client
     ports:
       - 11700:3000
