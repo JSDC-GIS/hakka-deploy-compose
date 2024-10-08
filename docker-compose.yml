@@ -8,10 +8,75 @@ volumes:
   hakka-cache:
 
 services:
-  hakka-client:
-    image: jsdc2021/hakka-client-next:b0.20240926.179
-    container_name: hakka-client
+  hakka-nginx:
+    image: jsdc2021/hakka-nginx:b0.20241003.1
+    container_name: hakka-nginx
     ports:
-      - 11700:3000
+      - ${service_port}:80
+    networks:
+      - hakka
+    depends_on:
+      - hakka-backend
+
+  hakka-client:
+    image: jsdc2021/hakka-client-next:b0.20241008.187
+    container_name: hakka-client
+    networks:
+      - hakka
+    depends_on:
+      - hakka-backend
+
+  hakka-cms:
+    image: jsdc2021/hakka-cms-next:b0.20241003.1
+    container_name: hakka-cms
+    networks:
+      - hakka
+    depends_on:
+      - hakka-backend
+
+  hakka-backend:
+    image: jsdc2021/hakka-backend-nest:b0.20241003.1
+    container_name: hakka-backend
+    entrypoint: ["/app/entrypoint/entrypoint.sh"]
+    networks:
+      - hakka
+    volumes:
+      - ./storage:/app/storage
+    depends_on:
+      - hakka-postgres
+
+  hakka-cache:
+    image: redis:latest
+    container_name: hakka-cache
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${redis_password}
+    volumes:
+      - hakka-cache:/data
+    networks:
+      - hakka
+
+  hakka-postgres:
+    image: postgis/postgis:14-3.3
+    container_name: hakka-postgres
+    environment:
+      POSTGRES_USER: ${postgres_user}
+      POSTGRES_PASSWORD: ${postgres_password}
+      APP_DB_USER: ${postgres_user}
+      APP_DB_PASS: ${postgres_password}
+      APP_DB_NAME: ${postgres_database}
+      PGDATA: /data/postgres
+    volumes:
+      - ./database-entrypoint:/docker-entrypoint-initdb.d/
+      - ./hakka-postgres:/data/postgres
+    networks:
+      - hakka
+
+  hakka-pgadmin:
+    image: dpage/pgadmin4
+    container_name: hakka-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${pgadmin_user}@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: ${pgadmin_password}
+    ports:
+      - "${pgadmin_port}:80"
     networks:
       - hakka
