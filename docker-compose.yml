@@ -19,7 +19,7 @@ services:
       - hakka-backend
 
   hakka-client:
-    image: jsdc2021/hakka-client-next:b0.20241008.187
+    image: jsdc2021/hakka-client-next:b0.20241029.197
     container_name: hakka-client
     networks:
       - hakka
