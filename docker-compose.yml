@@ -1,4 +1,3 @@
-
 networks:
   hakka:
     driver: bridge
@@ -54,7 +53,7 @@ services:
       - hakka
 
   hakka-postgres:
-    image: postgis/postgis:14-3.3
+    image: postgis/postgis:17-3.5
     container_name: hakka-postgres
     environment:
       POSTGRES_USER: ${postgres_user}
