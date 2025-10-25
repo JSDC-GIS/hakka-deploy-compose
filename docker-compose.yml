@@ -22,7 +22,7 @@ services:
     networks:
       - hakka
     ports:
-      - ${client_service_port}:80
+      - ${client_service_port}:3000
     depends_on:
       - hakka-backend
 
