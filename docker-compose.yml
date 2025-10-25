@@ -7,7 +7,7 @@ volumes:
 
 services:
   hakka-nginx:
-    image: jsdc2021/hakka-nginx:b0.20241003.1
+    image: jsdc2021/hakka-nginx:b0.20241225.10
     container_name: hakka-nginx
     ports:
       - ${service_port}:80
@@ -21,6 +21,8 @@ services:
     container_name: hakka-client
     networks:
       - hakka
+    ports:
+      - ${client_service_port}:80
     depends_on:
       - hakka-backend
 
