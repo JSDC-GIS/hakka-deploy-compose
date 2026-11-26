@@ -9,6 +9,7 @@ services:
   hakka-nginx:
     image: jsdc2021/hakka-nginx:b0.20241225.10
     container_name: hakka-nginx
+    restart: always
     ports:
       - ${service_port}:80
     networks:
@@ -19,6 +20,7 @@ services:
   hakka-client:
     image: jsdc2021/hakka-client-next:b0.20251116.x
     container_name: hakka-client
+    restart: always
     networks:
       - hakka
     ports:
@@ -29,6 +31,7 @@ services:
   hakka-cms:
     image: jsdc2021/hakka-cms-next:b0.20241212.2
     container_name: hakka-cms
+    restart: always
     networks:
       - hakka
     depends_on:
@@ -37,6 +40,7 @@ services:
   hakka-backend:
     image: jsdc2021/hakka-backend-nest:b0.20241003.1
     container_name: hakka-backend
+    restart: always
     entrypoint: ["/app/entrypoint/entrypoint.sh"]
     networks:
       - hakka
@@ -48,6 +52,7 @@ services:
   hakka-cache:
     image: redis:latest
     container_name: hakka-cache
+    restart: always
     command: redis-server --save 20 1 --loglevel warning --requirepass ${redis_password}
     volumes:
       - hakka-cache:/data
@@ -55,8 +60,9 @@ services:
       - hakka
 
   hakka-postgres:
-    image: postgis/postgis:17-3.5
+    image: postgis/postgis:18-3.7
     container_name: hakka-postgres
+    restart: always
     environment:
       POSTGRES_USER: ${postgres_user}
       POSTGRES_PASSWORD: ${postgres_password}
@@ -73,6 +79,7 @@ services:
   hakka-pgadmin:
     image: dpage/pgadmin4
     container_name: hakka-pgadmin
+    restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: ${pgadmin_user}@gmail.com
       PGADMIN_DEFAULT_PASSWORD: ${pgadmin_password}
