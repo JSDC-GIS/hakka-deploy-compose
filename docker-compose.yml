@@ -23,8 +23,6 @@ services:
     restart: always
     networks:
       - hakka
-    ports:
-      - ${client_service_port}:3000
     depends_on:
       - hakka-backend
 
